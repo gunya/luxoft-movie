@@ -93,12 +93,10 @@ public class MovieServiceTest {
     @Test
     public void happyFlow() throws Exception {
     	List<String> reqUrls = Arrays.stream(requestUrlArr).map(s -> baseUrl + s).collect(Collectors.toList());
-
     	
         MvcResult resultActions = mockMvc.perform(get(reqUrls.get(0))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(MAPPER.writeValueAsString(responseList.get(0))))
-                .andExpect(request().asyncStarted())
+                .contentType(MediaType.APPLICATION_JSON))
+        		.andExpect(request().asyncStarted())
                 .andReturn();
 
         mockMvc.perform(asyncDispatch(resultActions))
