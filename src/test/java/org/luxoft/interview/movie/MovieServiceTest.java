@@ -5,7 +5,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
@@ -25,6 +25,7 @@ import org.junit.runner.RunWith;
 import org.luxoft.interview.movie.domain.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,10 +36,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 @RunWith(SpringJUnit4ClassRunner.class)
+@AutoConfigureWireMock
 @SpringBootTest
 public class MovieServiceTest {
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -95,10 +94,10 @@ public class MovieServiceTest {
     public void happyFlow() throws Exception {
     	List<String> reqUrls = Arrays.stream(requestUrlArr).map(s -> baseUrl + s).collect(Collectors.toList());
 
-    	ApiReque
-        MvcResult resultActions = mockMvc.perform(post("/movie/comment")
+    	
+        MvcResult resultActions = mockMvc.perform(get(reqUrls.get(0))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(MAPPER.writeValueAsString(reqUrls)))
+                .content(MAPPER.writeValueAsString(responseList.get(0))))
                 .andExpect(request().asyncStarted())
                 .andReturn();
 

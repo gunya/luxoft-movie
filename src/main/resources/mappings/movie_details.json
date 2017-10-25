@@ -1,0 +1,17 @@
+[{"body":{
+  "id" : 1,
+  "name" : "Brave Heart",
+  "description" : "Full of action and thrill.",
+  "commentMap" : {
+    "1" : "Cool I like it",
+    "2" : "Nice"
+  }
+},"status":200,"duration":68},{"body":{
+  "id" : 2,
+  "name" : "Walle",
+  "description" : "Emotions and a new story, love of a robot.",
+  "commentMap" : {
+    "1" : "Amazing",
+    "3" : "super"
+  }
+},"status":200,"duration":0},{"body":Failed: Couldn't find the record,"status":502,"duration":0}]

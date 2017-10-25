@@ -1,14 +1,13 @@
 package org.luxoft.interview.movie;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.luxoft.interview.movie.domain.ApiRequest;
 import org.luxoft.interview.movie.domain.ApiResponse;
 import org.luxoft.interview.movie.domain.Task;
 import org.luxoft.interview.util.Data;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,9 +40,9 @@ public class MovieServiceImpl implements MovieService {
 				} catch (JsonProcessingException e) {
 					e.printStackTrace();
 				}
-    			task.success(index, time, 200, json);
+    			task.message(index, time, HttpStatus.OK.value(), json);
     		} else {
-    			task.fail(index, time, "Couldn't find the record");
+    			task.message(index, time, HttpStatus.NOT_FOUND.value(), "\"Sorry, couldn't find any movie with the given details.\"");
     		}    
         }
         return task.getResponses();
@@ -54,23 +53,15 @@ public class MovieServiceImpl implements MovieService {
 	public List<ApiResponse> commentOnMovie(Task task, ApiRequest request) {
 		log.info("Started task with {} movieId", task.getMovieList().size());
         task.start();
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         
         final long time = System.currentTimeMillis();
         Integer movieId = request.getMovieId();
         
         if(Data.data.containsKey(movieId)) {
-        	String json = "";
-			try {
-				Data.data.get(movieId).getCommentMap().put(new Integer(request.getUser().getId()), request.getComment());
-				json = ow.writeValueAsString(Data.data.get(movieId));
-			} catch (JsonProcessingException e) {
-				e.printStackTrace();
-			}
-			
-			task.success(0, time, 200, json);
+			Data.data.get(movieId).getCommentMap().put(new Integer(request.getUser().getId()), request.getComment());
+			task.message(0, time, HttpStatus.OK.value(), "\"Successfull, added the comment.\"");
 		} else {
-			task.fail(0, time, "Couldn't find the record");
+			task.message(0, time, HttpStatus.NOT_FOUND.value(), "\"Sorry, couldn't find any movie with the given details.\"");
 		} 
         
 		return task.getResponses();

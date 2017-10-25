@@ -40,15 +40,7 @@ public class Task implements Serializable {
     	return unmodifiableList(responses);
     }
 
-    public void fail(int index, long time, String message) {
-        responses.get(index).setStatus(502);
-        responses.get(index).setBody("Failed: " + message);
-        responses.get(index).setDuration((int)(System.currentTimeMillis() - time));
-
-        checkDone();
-    }
-
-    public void success(int index, long time, int status, String body) {
+    public void message(int index, long time, int status, String body) {
         responses.get(index).setStatus(status);
         responses.get(index).setBody(body);
         responses.get(index).setDuration((int)(System.currentTimeMillis() - time));

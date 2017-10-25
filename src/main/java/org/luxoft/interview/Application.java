@@ -23,7 +23,6 @@ public class Application {
     public void prepareData() {
     	ApplicationContext context = new AnnotationConfigApplicationContext(CacheConfig.class);
     	Data.prepareData();
-    	//shut down the Spring context so that Ehcache got chance
     	((ConfigurableApplicationContext)context).close();
     }
 }
